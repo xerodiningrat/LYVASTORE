@@ -50,3 +50,8 @@ modify, or commercialize the contents without prior written approval from Lyva
 Indonesia.
 
 See [LICENSE](./LICENSE) for the full copyright and usage terms.
+
+Additional repository notices:
+
+- [NOTICE](./NOTICE)
+- [TRADEMARK.md](./TRADEMARK.md)
