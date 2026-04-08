@@ -1,0 +1,16 @@
+.git
+.github
+.env
+.env.*
+.venv*
+node_modules
+vendor
+public/build
+public/hot
+public/storage
+public/apk
+storage
+bootstrap/cache/*.php
+chatbot-backend
+database/*.sqlite
+*.log

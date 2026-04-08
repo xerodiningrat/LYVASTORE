@@ -48,6 +48,7 @@ internal.
 - Build Tool: Vite
 - Database lokal default: SQLite
 - Additional services: VIPayment, Duitku, WhatsApp flow, Google Sheets sync
+- Package target: GitHub Container Registry (`ghcr.io/xerodiningrat/lyvastore`)
 
 ## Repository Structure
 
@@ -91,10 +92,26 @@ npm run typecheck
 php artisan optimize:clear
 ```
 
+## Packages
+
+Repo ini sekarang disiapkan untuk publish container image ke GitHub Packages
+melalui GitHub Container Registry.
+
+- Image: `ghcr.io/xerodiningrat/lyvastore`
+- Workflow: `.github/workflows/publish-container.yml`
+- Trigger: push ke `main`, tag `v*`, release publish, atau manual dispatch
+
+Contoh pull:
+
+```bash
+docker pull ghcr.io/xerodiningrat/lyvastore:latest
+```
+
 ## Operational Notes
 
 - Runtime files in `storage/`, built assets in `public/build/`, and local secrets like `.env` are intentionally ignored from Git.
 - Large release artifacts seperti APK sebaiknya tidak disimpan permanen di history Git.
+- Container image tidak memasukkan artefak besar seperti `public/apk/` dan virtualenv lokal.
 - Repo ini memuat aset brand dan artwork produksi, jadi perubahan visual sebaiknya tetap mengikuti identitas Lyva Indonesia.
 
 ## Legal
