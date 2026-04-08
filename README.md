@@ -1,29 +1,70 @@
-# LYVASTORE
+<p align="center">
+  <img src="./public/brand/lyva-mascot-mark.png" alt="Lyva Indonesia" width="96">
+</p>
 
-Laravel + Inertia + Vue storefront and admin panel for `lyvaindonesia.com`.
+<h1 align="center">LYVASTORE</h1>
+
+<p align="center">
+  Platform top up game, voucher digital, pulsa, e-wallet, dan entertainment premium milik <strong>Lyva Indonesia</strong>.
+</p>
+
+<p align="center">
+  <a href="https://lyvaindonesia.com">Website</a> ·
+  <a href="./ABOUT.md">About</a> ·
+  <a href="./NOTICE">Notice</a> ·
+  <a href="./TRADEMARK.md">Trademark</a> ·
+  <a href="./LICENSE">License</a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Laravel-12-red?style=flat-square" alt="Laravel 12">
+  <img src="https://img.shields.io/badge/Inertia.js-Vue-blue?style=flat-square" alt="Inertia Vue">
+  <img src="https://img.shields.io/badge/Vue-3-42b883?style=flat-square" alt="Vue 3">
+  <img src="https://img.shields.io/badge/TypeScript-Enabled-3178c6?style=flat-square" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Vite-Frontend-646cff?style=flat-square" alt="Vite">
+  <img src="https://img.shields.io/badge/License-Proprietary-black?style=flat-square" alt="Proprietary License">
+</p>
 
 ## About
 
-LYVASTORE adalah platform milik Lyva Indonesia untuk top up game, voucher
-digital, pulsa, e-wallet, dan layanan entertainment premium, lengkap dengan
-dashboard admin untuk operasional, promo, stok, transaksi, keuangan, dan
-monitoring.
+LYVASTORE adalah storefront dan admin panel untuk operasional `lyvaindonesia.com`.
+Project ini dipakai untuk mengelola katalog produk digital, proses checkout,
+monitoring transaksi, promo, keuangan, affiliate, hingga tooling pendukung
+internal.
 
-## Stack
+## Platform Highlights
 
-- Laravel 12
-- Inertia.js
-- Vue 3 + TypeScript
-- Vite
-- SQLite by default for local setup
+- katalog publik untuk top up game, voucher digital, pulsa, e-wallet, dan produk entertainment
+- checkout dan preview transaksi dengan integrasi VIPayment dan Duitku
+- dashboard admin untuk produk, promo, margin, stok manual, transaksi, keamanan, dan finance
+- sistem affiliate dan coin program untuk loyalty / reward
+- mobile endpoints untuk katalog, auth, checkout, dan account history
+- background remover dan tooling internal lain untuk operasional harian
 
-## Main Features
+## Tech Stack
 
-- Public catalog for game top up, vouchers, entertainment, pulsa, and e-wallet
-- Checkout flow with VIPayment and Duitku integrations
-- Admin dashboard for products, promos, finance, manual stock, affiliates, and security
-- Background remover service
-- Mobile API endpoints for catalog, auth, checkout, and account history
+- Backend: Laravel 12
+- Frontend: Inertia.js, Vue 3, TypeScript
+- Build Tool: Vite
+- Database lokal default: SQLite
+- Additional services: VIPayment, Duitku, WhatsApp flow, Google Sheets sync
+
+## Repository Structure
+
+```text
+app/               Laravel controllers, services, models, middleware
+bootstrap/         Laravel bootstrap files
+chatbot-backend/   Lightweight Python chatbot companion service
+config/            App and integration configuration
+database/          Migrations, factories, seeders
+docs/              Supporting integration docs and snippets
+public/            Public assets, product artwork, icons, brand files
+requirements/      Python dependency files
+resources/         Vue pages, layouts, components, Blade views
+routes/            Web, auth, settings, and console routes
+scripts/           Utility scripts and background remover helpers
+storage/           Runtime files and generated app data
+```
 
 ## Local Setup
 
@@ -43,12 +84,20 @@ For frontend development:
 npm run dev
 ```
 
-## Notes
+Optional quality checks:
 
-- Runtime files in `storage/`, built assets in `public/build/`, and local secrets like `.env` are ignored from Git.
-- Large release artifacts such as APK files should be distributed outside Git history when possible.
+```bash
+npm run typecheck
+php artisan optimize:clear
+```
 
-## Copyright and License
+## Operational Notes
+
+- Runtime files in `storage/`, built assets in `public/build/`, and local secrets like `.env` are intentionally ignored from Git.
+- Large release artifacts seperti APK sebaiknya tidak disimpan permanen di history Git.
+- Repo ini memuat aset brand dan artwork produksi, jadi perubahan visual sebaiknya tetap mengikuti identitas Lyva Indonesia.
+
+## Legal
 
 Copyright (c) 2026 Lyva Indonesia. All rights reserved.
 
@@ -56,10 +105,9 @@ This repository is proprietary. No permission is granted to reuse, redistribute,
 modify, or commercialize the contents without prior written approval from Lyva
 Indonesia.
 
-See [LICENSE](./LICENSE) for the full copyright and usage terms.
-
 Additional repository notices:
 
 - [ABOUT.md](./ABOUT.md)
 - [NOTICE](./NOTICE)
 - [TRADEMARK.md](./TRADEMARK.md)
+- [LICENSE](./LICENSE)
