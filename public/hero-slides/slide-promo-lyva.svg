@@ -1,0 +1,77 @@
+<svg width="1810" height="650" viewBox="0 0 1810 650" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="116" y1="44" x2="1643" y2="650" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="0.45" stop-color="#1D4ED8"/>
+      <stop offset="1" stop-color="#22C55E"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="300" y1="120" x2="1456" y2="572" gradientUnits="userSpaceOnUse">
+      <stop stop-color="white" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="white" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="pill" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#F8FAFC"/>
+      <stop offset="1" stop-color="#DBEAFE"/>
+    </linearGradient>
+    <filter id="blurGlow" x="-120" y="-120" width="2050" height="890" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="60"/>
+    </filter>
+  </defs>
+
+  <rect width="1810" height="650" rx="54" fill="url(#bg)"/>
+
+  <g filter="url(#blurGlow)">
+    <circle cx="270" cy="134" r="120" fill="#60A5FA" fill-opacity="0.38"/>
+    <circle cx="1502" cy="154" r="170" fill="#34D399" fill-opacity="0.26"/>
+    <circle cx="1408" cy="546" r="190" fill="#A78BFA" fill-opacity="0.22"/>
+  </g>
+
+  <rect x="56" y="54" width="1698" height="542" rx="42" fill="url(#glass)" stroke="#FFFFFF" stroke-opacity="0.24"/>
+
+  <g opacity="0.9">
+    <rect x="113" y="110" width="198" height="54" rx="27" fill="#F8FAFC" fill-opacity="0.12" stroke="#F8FAFC" stroke-opacity="0.28"/>
+    <text x="148" y="145" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="4">PROMO AKTIF</text>
+  </g>
+
+  <text x="114" y="255" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="86" font-weight="800">Pakai Kode Promo</text>
+  <text x="114" y="340" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="86" font-weight="800">Biar Checkout Lebih Hemat.</text>
+
+  <text x="118" y="405" fill="#DBEAFE" font-family="Arial, sans-serif" font-size="31" font-weight="500">
+    Top up game, voucher digital, dan produk favorit LYVA sekarang bisa
+  </text>
+  <text x="118" y="447" fill="#DBEAFE" font-family="Arial, sans-serif" font-size="31" font-weight="500">
+    dipadukan dengan kode promo pilihan langsung saat checkout.
+  </text>
+
+  <g>
+    <rect x="115" y="490" width="274" height="74" rx="37" fill="url(#pill)"/>
+    <text x="167" y="536" fill="#1D4ED8" font-family="Arial, sans-serif" font-size="28" font-weight="800">CEK PRODUK</text>
+  </g>
+
+  <g>
+    <rect x="408" y="490" width="312" height="74" rx="37" fill="#F8FAFC" fill-opacity="0.12" stroke="#F8FAFC" stroke-opacity="0.26"/>
+    <text x="469" y="536" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="28" font-weight="700">PAKAI KODE PROMO</text>
+  </g>
+
+  <g>
+    <rect x="1185" y="114" width="496" height="430" rx="38" fill="#F8FAFC" fill-opacity="0.1" stroke="#F8FAFC" stroke-opacity="0.22"/>
+    <rect x="1227" y="153" width="410" height="152" rx="28" fill="#0F172A" fill-opacity="0.42"/>
+    <text x="1263" y="210" fill="#93C5FD" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="3">CONTOH PROMO</text>
+    <text x="1263" y="268" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="64" font-weight="800">HEMAT10</text>
+
+    <rect x="1227" y="333" width="192" height="150" rx="28" fill="#FFFFFF" fill-opacity="0.92"/>
+    <text x="1260" y="384" fill="#64748B" font-family="Arial, sans-serif" font-size="22" font-weight="700">Diskon</text>
+    <text x="1260" y="446" fill="#16A34A" font-family="Arial, sans-serif" font-size="58" font-weight="800">10%</text>
+
+    <rect x="1444" y="333" width="193" height="150" rx="28" fill="#FFFFFF" fill-opacity="0.92"/>
+    <text x="1476" y="384" fill="#64748B" font-family="Arial, sans-serif" font-size="22" font-weight="700">Min. belanja</text>
+    <text x="1476" y="446" fill="#0F172A" font-family="Arial, sans-serif" font-size="42" font-weight="800">Rp10K</text>
+  </g>
+
+  <g opacity="0.18">
+    <circle cx="1050" cy="170" r="12" fill="#FFF"/>
+    <circle cx="1092" cy="214" r="8" fill="#FFF"/>
+    <circle cx="1018" cy="238" r="10" fill="#FFF"/>
+    <circle cx="958" cy="122" r="7" fill="#FFF"/>
+  </g>
+</svg>

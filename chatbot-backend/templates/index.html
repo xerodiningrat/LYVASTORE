@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lyva Indonesia Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <p class="eyebrow">Chatbot Lokal Tanpa API AI</p>
+        <h1>Lyva Indonesia Knowledge Bot</h1>
+        <p class="lead">
+          Bot ini menjawab berdasarkan data lokal yang kamu ajarkan. Kalau belum tahu,
+          pertanyaannya disimpan supaya bisa kamu isi nanti.
+        </p>
+      </section>
+
+      <section class="panel">
+        <h2>Chat</h2>
+        <div class="chat-box">
+          {% if history %}
+            {% for item in history %}
+              <div class="bubble {{ item.role }}">
+                <span class="label">{{ "Kamu" if item.role == "user" else "Bot" }}</span>
+                <p>{{ item.text }}</p>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty-state">
+              Belum ada chat. Coba tanya sesuatu tentang Lyva Indonesia.
+            </div>
+          {% endif %}
+        </div>
+
+        <form action="{{ url_for('chat') }}" method="post" class="stack">
+          <textarea
+            name="question"
+            rows="3"
+            placeholder="Contoh: Apa layanan utama Lyva Indonesia?"
+            required
+          ></textarea>
+          <div class="actions">
+            <button type="submit">Kirim Pertanyaan</button>
+          </div>
+        </form>
+
+        <form action="{{ url_for('reset') }}" method="post">
+          <button type="submit" class="secondary">Reset Chat</button>
+        </form>
+      </section>
+
+      <section class="panel grid">
+        <div>
+          <h2>Ajari Bot</h2>
+          <form action="{{ url_for('learn') }}" method="post" class="stack">
+            <input
+              type="text"
+              name="teach_question"
+              placeholder="Pertanyaan yang mau diajarkan"
+              required
+            />
+            <textarea
+              name="teach_answer"
+              rows="5"
+              placeholder="Jawaban resmi tentang Lyva Indonesia"
+              required
+            ></textarea>
+            <input
+              type="text"
+              name="keywords"
+              placeholder="Kata kunci, pisahkan dengan koma"
+            />
+            <button type="submit">Simpan Pengetahuan</button>
+          </form>
+        </div>
+
+        <div>
+          <h2>Pertanyaan Belum Terjawab</h2>
+          <div class="unanswered">
+            {% if unanswered %}
+              <ul>
+                {% for item in unanswered %}
+                  <li>{{ item }}</li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p>Belum ada pertanyaan yang tertunda.</p>
+            {% endif %}
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

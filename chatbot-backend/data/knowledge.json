@@ -1,0 +1,77 @@
+[
+  {
+    "question": "Apa itu Lyva Indonesia?",
+    "answer": "Lyva Indonesia adalah platform untuk top up game, voucher digital, e-wallet, pulsa, dan langganan premium dengan proses yang cepat, aman, dan praktis.",
+    "keywords": ["lyva", "indonesia", "profil", "tentang", "platform"]
+  },
+  {
+    "question": "Apa fungsi chatbot ini?",
+    "answer": "Chatbot ini menjawab berdasarkan pengetahuan lokal yang kamu simpan sendiri, tanpa terhubung ke API AI eksternal.",
+    "keywords": ["chatbot", "fungsi", "lokal", "offline"]
+  },
+  {
+    "question": "Produk apa saja yang tersedia di Lyva Indonesia?",
+    "answer": "Lyva Indonesia menyediakan top up game, voucher digital, e-wallet, pulsa, dan langganan premium seperti ChatGPT dan layanan digital lainnya.",
+    "keywords": ["produk", "layanan", "top up", "voucher", "e-wallet", "pulsa", "langganan premium"]
+  },
+  {
+    "question": "Apakah bisa top up game di Lyva Indonesia?",
+    "answer": "Bisa. Untuk top up game, sebut nama game dan nominal yang kamu inginkan. Biasanya kamu juga perlu mengisi user ID dan data akun yang diperlukan saat checkout.",
+    "keywords": ["top up", "game", "mobile legends", "free fire", "pubg", "genshin", "hok"]
+  },
+  {
+    "question": "Metode pembayaran apa yang tersedia?",
+    "answer": "Di Lyva Indonesia pembayaran umumnya bisa dilakukan lewat QRIS, e-wallet, dan virtual account sesuai opsi yang muncul saat checkout.",
+    "keywords": ["pembayaran", "bayar", "qris", "ovo", "gopay", "dana", "virtual account", "va"]
+  },
+  {
+    "question": "Bagaimana cara cek status pesanan atau transaksi?",
+    "answer": "Untuk cek status pesanan, buka halaman Riwayat Transaksi lalu masukkan data invoice atau identitas transaksi yang kamu punya. Dari situ status pembayaran dan proses order biasanya bisa dilihat.",
+    "keywords": ["status", "pesanan", "transaksi", "invoice", "riwayat", "cek order"]
+  },
+  {
+    "question": "Berapa lama proses produk premium seperti ChatGPT atau CapCut?",
+    "answer": "Untuk produk manual seperti ChatGPT atau CapCut, pengiriman biasanya diproses manual oleh admin setelah pembayaran masuk. Estimasi amannya sekitar 5 sampai 30 menit jika stok atau akun siap, tetapi bisa lebih lama saat antre atau perlu penyesuaian akun.",
+    "keywords": ["chatgpt", "capcut", "premium", "berapa lama", "estimasi", "proses", "pengiriman"]
+  },
+  {
+    "question": "Bagaimana jika pembayaran belum masuk?",
+    "answer": "Kalau pembayaran belum masuk, langkah paling aman adalah cek dulu halaman Riwayat Transaksi. Jika status masih bermasalah, siapkan detail produk, metode pembayaran, dan waktu transaksi untuk dibantu penelusuran lebih lanjut.",
+    "keywords": ["pembayaran belum masuk", "belum masuk", "gagal bayar", "kendala bayar", "riwayat transaksi"]
+  },
+  {
+    "question": "Bagaimana jika saya mengalami kendala saat checkout?",
+    "answer": "Kalau ada kendala saat checkout atau pesanan belum masuk, cek Riwayat Transaksi terlebih dahulu. Jika masih bermasalah, kirim detail produk, metode bayar, dan waktu transaksi supaya bisa ditelusuri lebih cepat.",
+    "keywords": ["kendala", "checkout", "error", "gagal", "support", "bantuan"]
+  },
+  {
+    "question": "Apakah Lyva Indonesia menjual produk akun premium?",
+    "answer": "Ya. Lyva Indonesia juga menyediakan produk akun premium seperti ChatGPT, CapCut, dan layanan digital lain sesuai katalog yang tersedia di website.",
+    "keywords": ["akun premium", "chatgpt premium", "capcut", "langganan", "premium"]
+  },
+  {
+    "question": "Bagaimana cara order di Lyva Indonesia?",
+    "answer": "Cara order di Lyva Indonesia umumnya cukup pilih produk, isi data yang dibutuhkan seperti user ID atau detail akun, pilih metode pembayaran, lalu selesaikan checkout. Setelah pembayaran berhasil, pesanan akan diproses sesuai jenis produknya.",
+    "keywords": ["cara order", "cara beli", "checkout", "beli", "pesan", "order"]
+  },
+  {
+    "question": "Apakah proses di Lyva Indonesia cepat?",
+    "answer": "Sebagian besar proses di Lyva Indonesia dibuat agar cepat dan praktis. Untuk produk otomatis, proses biasanya lebih singkat, sedangkan produk manual seperti ChatGPT atau CapCut diproses admin setelah pembayaran masuk.",
+    "keywords": ["cepat", "proses cepat", "instan", "berapa cepat", "estimasi", "diproses"]
+  },
+  {
+    "question": "Apakah ada halaman riwayat transaksi di Lyva Indonesia?",
+    "answer": "Ada. Kamu bisa cek halaman Riwayat Transaksi untuk melihat status pembayaran dan proses order menggunakan data invoice atau identitas transaksi yang kamu punya.",
+    "keywords": ["riwayat transaksi", "history transaksi", "cek transaksi", "status order", "invoice"]
+  },
+  {
+    "question": "Apa yang bisa dibantu chatbot Lyva Indonesia?",
+    "answer": "Chatbot Lyva Indonesia bisa membantu menjelaskan produk yang tersedia, metode pembayaran, estimasi proses, cara checkout, dan langkah awal saat ada kendala transaksi.",
+    "keywords": ["bisa bantu apa", "fungsi chatbot", "bantuan", "fitur chatbot", "chatbot lyva"]
+  },
+  {
+    "question": "Bagaimana cara reset password akun Lyva Indonesia?",
+    "answer": "Kalau mau reset password akun Lyva Indonesia, buka halaman login lalu pilih menu \"Lupa Password\" atau langsung ke /forgot-password. Masukkan email akunmu, lalu cek email untuk link reset password. Kalau email belum masuk, cek folder spam atau promosi juga ya.",
+    "keywords": ["reset password", "lupa password", "ganti password", "ubah password", "kata sandi", "pw", "forgot password"]
+  }
+]

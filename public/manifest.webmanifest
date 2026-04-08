@@ -1,0 +1,25 @@
+{
+  "name": "LYVA Indonesia",
+  "short_name": "LYVA",
+  "description": "Top up game, voucher digital, e-wallet, pulsa, dan langganan premium langsung dari LYVA Indonesia.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f8fbff",
+  "theme_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/brand/lyva-mascot-mark.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/brand/lyva-mascot-hd.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

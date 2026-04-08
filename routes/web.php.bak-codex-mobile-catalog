@@ -1,0 +1,433 @@
+<?php
+
+use App\Http\Controllers\Admin\BrandingSettingsController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\AffiliateMonitorController;
+use App\Http\Controllers\Admin\MarginSettingsController;
+use App\Http\Controllers\Admin\ManualStockController;
+use App\Http\Controllers\Admin\ProviderAvailabilityController;
+use App\Http\Controllers\Admin\PromoCodeController;
+use App\Http\Controllers\Admin\ProductSettingsController;
+use App\Http\Controllers\Admin\SecurityMonitorController;
+use App\Http\Controllers\Admin\TransactionMonitorController;
+use App\Http\Controllers\AccountIssueReportController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\DuitkuCallbackController;
+use App\Http\Controllers\DuitkuPaymentMethodController;
+use App\Http\Controllers\LeaderboardController;
+use App\Http\Controllers\LyvaflowWhatsappWebhookController;
+use App\Http\Controllers\LyvaCoinController;
+use App\Http\Controllers\SupportChatController;
+use App\Http\Controllers\TransactionHistoryController;
+use App\Http\Controllers\VipaymentNicknameController;
+use App\Http\Controllers\VipaymentProductServiceController;
+use App\Models\Transaction;
+use App\Services\DuitkuService;
+use App\Services\VipaymentService;
+use App\Support\ProductFamilyMatcher;
+use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+
+Route::get('/', function (VipaymentService $vipayment) {
+    $vipCatalogProducts = [];
+
+    if ($vipayment->configured()) {
+        try {
+            $vipCatalogProducts = $vipayment->getCatalogProducts();
+        } catch (\Throwable $exception) {
+            report($exception);
+        }
+    }
+
+    return Inertia::render('Welcome', [
+        'vipCatalogProducts' => $vipCatalogProducts,
+    ]);
+})->name('home');
+
+Route::get('riwayat-transaksi', TransactionHistoryController::class)->name('transactions.history');
+
+Route::get('leaderboard', LeaderboardController::class)->name('leaderboard');
+
+Route::get('lyva-coins', LyvaCoinController::class)->name('coins.index');
+
+Route::get('artikel', function () {
+    return Inertia::render('Articles');
+})->name('articles.index');
+
+Route::get('terms-of-service', function () {
+    return Inertia::render('TermsOfService');
+})->name('legal.terms');
+
+Route::get('privacy-policy', function () {
+    return Inertia::render('PrivacyPolicy');
+})->name('legal.privacy');
+
+Route::middleware('auth')->group(function () {
+Route::get('akun-bermasalah', function (VipaymentService $vipayment) {
+    $accountIssueProducts = [
+        ['id' => 'vip-game-chatgpt', 'name' => 'ChatGPT'],
+        ['id' => 'vip-game-capcut-pro', 'name' => 'CapCut Pro'],
+        ['id' => 'vip-game-canva-pro', 'name' => 'Canva Pro'],
+        ['id' => 'vip-game-netflix', 'name' => 'Netflix'],
+        ['id' => 'vip-game-spotify-premium', 'name' => 'Spotify Premium'],
+        ['id' => 'vip-game-youtube-premium', 'name' => 'YouTube Premium'],
+        ['id' => 'vip-game-bstation-premium', 'name' => 'Bstation Premium'],
+        ['id' => 'vip-game-iqiyi-premium', 'name' => 'iQIYI Premium'],
+        ['id' => 'vip-game-vidio-premier', 'name' => 'Vidio Premier'],
+        ['id' => 'vip-game-viu-premium', 'name' => 'Viu Premium'],
+        ['id' => 'vip-game-wetv-premium', 'name' => 'WeTV Premium'],
+        ['id' => 'vip-game-vision-plus', 'name' => 'Vision Plus'],
+    ];
+
+    if ($vipayment->configured()) {
+        try {
+            $accountKeywords = ['chatgpt', 'capcut', 'canva', 'netflix', 'spotify', 'youtube', 'bstation', 'iqiyi', 'vidio', 'viu', 'wetv', 'vision plus'];
+
+            $accountIssueProducts = collect($vipayment->getCatalogProducts())
+                ->filter(function (array $product) use ($accountKeywords) {
+                    $haystack = Str::lower(trim(($product['id'] ?? '').' '.($product['name'] ?? '').' '.($product['categoryId'] ?? '')));
+
+                    return collect($accountKeywords)->contains(fn (string $keyword) => Str::contains($haystack, $keyword));
+                })
+                ->map(fn (array $product) => [
+                    'id' => (string) ($product['id'] ?? ''),
+                    'name' => (string) ($product['name'] ?? ''),
+                ])
+                ->filter(fn (array $product) => $product['id'] !== '' && $product['name'] !== '')
+                ->unique('id')
+                ->sortBy('name')
+                ->values()
+                ->all();
+        } catch (\Throwable $exception) {
+            report($exception);
+        }
+    }
+
+    return Inertia::render('AccountIssues', [
+        'products' => $accountIssueProducts,
+    ]);
+})->name('account-issues.index');
+Route::post('akun-bermasalah', AccountIssueReportController::class)
+    ->middleware('bot.guard')
+    ->middleware('throttle:account-issues')
+    ->name('account-issues.store');
+});
+
+Route::post('support/chat', SupportChatController::class)
+    ->middleware('bot.guard')
+    ->middleware('throttle:support-chat')
+    ->name('support.chat.reply');
+
+Route::post('lyvaflow/whatsapp/incoming', LyvaflowWhatsappWebhookController::class)
+    ->middleware('throttle:lyvaflow-whatsapp-webhook')
+    ->withoutMiddleware([ValidateCsrfToken::class])
+    ->name('lyvaflow.whatsapp.incoming');
+
+Route::get('duitku/payment-methods', DuitkuPaymentMethodController::class)
+    ->middleware('throttle:duitku-payment-methods')
+    ->name('duitku.payment-methods');
+Route::post('duitku/callback', DuitkuCallbackController::class)
+    ->middleware('throttle:duitku-callback')
+    ->withoutMiddleware([ValidateCsrfToken::class])
+    ->name('duitku.callback');
+Route::get('vipayment/products/{product}/services', VipaymentProductServiceController::class)
+    ->middleware('throttle:vipayment-services')
+    ->name('vipayment.products.services');
+Route::post('vipayment/products/{product}/nickname', VipaymentNicknameController::class)
+    ->middleware('throttle:vipayment-nickname')
+    ->name('vipayment.products.nickname');
+Route::post('checkout/preview', [CheckoutController::class, 'store'])
+    ->middleware('bot.guard')
+    ->middleware('throttle:checkout-preview')
+    ->name('checkout.preview.store');
+Route::post('checkout/promo', [CheckoutController::class, 'resolvePromo'])
+    ->middleware('throttle:checkout-promo')
+    ->name('checkout.promo.resolve');
+Route::get('checkout/{transaction}', [CheckoutController::class, 'show'])->name('checkout.show');
+Route::post('checkout/{transaction}/rating', [CheckoutController::class, 'rate'])
+    ->middleware('throttle:checkout-rating')
+    ->name('checkout.rating.store');
+
+Route::get('produk/{product}', function (string $product, VipaymentService $vipayment, DuitkuService $duitku) {
+    if ($vipayment->configured()) {
+        try {
+            $canonicalAliases = [
+                'vidio' => 'vip-game-vidio-premier',
+                'vidio-premier' => 'vip-game-vidio-premier',
+                'iqiyi' => 'vip-game-iqiyi-premium',
+                'iqiyi-premium' => 'vip-game-iqiyi-premium',
+                'viu' => 'vip-game-viu-premium',
+                'viu-premium' => 'vip-game-viu-premium',
+                'youtube-premium' => 'vip-game-youtube-premium',
+            ];
+
+            $canonicalProductId = $canonicalAliases[$product] ?? null;
+
+            if ($canonicalProductId === null) {
+                $currentProductServices = null;
+
+                try {
+                    $currentProductServices = $vipayment->getProductServices($product);
+                } catch (\Throwable $exception) {
+                    report($exception);
+                }
+
+                if ($currentProductServices === null || $currentProductServices === []) {
+                    $canonicalProductId = collect([
+                        'vip-game-'.$product,
+                        'vip-prepaid-'.$product,
+                    ])->first(function (string $candidate) use ($vipayment, $product) {
+                        if ($candidate === $product) {
+                            return false;
+                        }
+
+                        return $vipayment->findCatalogProduct($candidate) !== null;
+                    });
+                }
+            }
+
+            if (is_string($canonicalProductId) && $canonicalProductId !== '') {
+                if (request()->header('X-Inertia')) {
+                    return Inertia::location(route('products.show', ['product' => $canonicalProductId]));
+                }
+
+                return to_route('products.show', ['product' => $canonicalProductId]);
+            }
+        } catch (\Throwable $exception) {
+            report($exception);
+        }
+    }
+
+    if (! $vipayment->isProductPubliclyAvailable($product)) {
+        return to_route('home');
+    }
+
+    $vipCatalogProduct = null;
+    $initialVipaymentTabs = [];
+    $initialVipaymentSource = 'fallback';
+    $initialVipaymentMessage = '';
+    $initialPaymentMethods = [];
+    $initialPaymentMethodsAmount = null;
+
+    if ($vipayment->configured()) {
+        try {
+            $vipCatalogProduct = $vipayment->findCatalogProduct($product);
+        } catch (\Throwable $exception) {
+            report($exception);
+        }
+
+        try {
+            $services = $vipayment->getProductServices($product);
+
+            if (is_array($services) && $services !== []) {
+                $initialVipaymentTabs = $services;
+                $initialVipaymentSource = 'vipayment';
+                $initialPaymentMethodsAmount = collect($services)
+                    ->flatMap(fn (array $tab) => $tab['groups'] ?? [])
+                    ->flatMap(fn (array $group) => $group['options'] ?? [])
+                    ->map(fn (array $option) => (int) ($option['price'] ?? 0))
+                    ->first(fn (int $price) => $price > 0);
+            } elseif ($services === null) {
+                $initialVipaymentMessage = 'Produk ini belum punya mapping VIPayment. Data lokal tetap dipakai.';
+            } else {
+                $initialVipaymentMessage = 'VIPayment belum mengembalikan layanan untuk produk ini. Data lokal tetap dipakai.';
+            }
+        } catch (\Throwable $exception) {
+            report($exception);
+            $initialVipaymentMessage = $exception->getMessage() ?: 'Gagal mengambil data produk dari VIPayment.';
+        }
+    }
+
+    if ($initialPaymentMethodsAmount && $duitku->configured()) {
+        try {
+            $initialPaymentMethods = $duitku->getPaymentMethods($initialPaymentMethodsAmount);
+        } catch (\Throwable $exception) {
+            report($exception);
+        }
+    }
+
+    $resolvedProductName = is_array($vipCatalogProduct) ? (string) ($vipCatalogProduct['name'] ?? '') : '';
+    $productFamily = ProductFamilyMatcher::resolve($product, $resolvedProductName);
+    $completedTransactionsQuery = ProductFamilyMatcher::applyTransactionScope(
+        Transaction::query()->where('status', Transaction::STATUS_COMPLETED),
+        $product,
+        $resolvedProductName,
+    );
+
+    $ratingAggregate = (clone $completedTransactionsQuery)
+        ->whereNotNull('rating_score')
+        ->selectRaw(
+            'count(*) as total_reviews, avg(rating_score) as average_score, '
+            .'sum(case when rating_score >= 4 then 1 else 0 end) as recommended_reviews, '
+            .'sum(case when rating_score = 5 then 1 else 0 end) as five_star_reviews'
+        )
+        ->first();
+
+    $processingDurations = (clone $completedTransactionsQuery)
+        ->whereNotNull('fulfilled_at')
+        ->get(['created_at', 'paid_at', 'fulfilled_at'])
+        ->map(static function (Transaction $transaction): ?int {
+            $startedAt = $transaction->paid_at ?? $transaction->created_at;
+            $completedAt = $transaction->fulfilled_at;
+
+            if (! $startedAt || ! $completedAt || $completedAt->lessThanOrEqualTo($startedAt)) {
+                return null;
+            }
+
+            return max(1, $startedAt->diffInMinutes($completedAt));
+        })
+        ->filter()
+        ->values()
+        ->all();
+
+    $formatBuyerName = static function (?string $customerName, ?string $customerEmail, ?string $customerWhatsapp): string {
+        $candidate = trim((string) ($customerName ?: $customerEmail ?: $customerWhatsapp ?: 'Pembeli'));
+
+        if ($candidate === '') {
+            return 'Pembeli';
+        }
+
+        if (filter_var($candidate, FILTER_VALIDATE_EMAIL)) {
+            [$localPart] = explode('@', $candidate, 2);
+            $candidate = $localPart ?: 'Pembeli';
+        }
+
+        $candidate = preg_replace('/\s+/', ' ', trim($candidate)) ?: 'Pembeli';
+
+        if (mb_strlen($candidate) <= 2) {
+            return mb_substr($candidate, 0, 1).'*';
+        }
+
+        return mb_substr($candidate, 0, 3).str_repeat('*', min(3, max(1, mb_strlen($candidate) - 3)));
+    };
+
+    $formatDurationLabel = static function (array $durations): string {
+        if ($durations === []) {
+            return 'Belum ada data';
+        }
+
+        sort($durations);
+
+        $min = (int) $durations[0];
+        $max = (int) $durations[(int) floor((count($durations) - 1) * 0.75)];
+
+        $format = static function (int $minutes): string {
+            if ($minutes >= 60) {
+                $hours = (int) ceil($minutes / 60);
+
+                return $hours.' jam';
+            }
+
+            return $minutes.' menit';
+        };
+
+        if ($min === $max) {
+            return $format($min);
+        }
+
+        return $format($min).'-'.$format($max);
+    };
+
+    $ratedTransactions = (clone $completedTransactionsQuery)
+        ->whereNotNull('rating_score')
+        ->orderByDesc('rated_at')
+        ->orderByDesc('updated_at')
+        ->limit(9)
+        ->get([
+            'public_id',
+            'customer_name',
+            'customer_email',
+            'customer_whatsapp',
+            'rating_score',
+            'rating_comment',
+            'rated_at',
+            'updated_at',
+        ]);
+
+    $totalReviews = (int) ($ratingAggregate?->total_reviews ?? 0);
+    $averageScore = $totalReviews > 0 ? (float) ($ratingAggregate?->average_score ?? 0) : 0;
+    $recommendationRate = $totalReviews > 0 ? (int) round(((int) ($ratingAggregate?->recommended_reviews ?? 0) / $totalReviews) * 100) : 0;
+    $fiveStarRate = $totalReviews > 0 ? (int) round(((int) ($ratingAggregate?->five_star_reviews ?? 0) / $totalReviews) * 100) : 0;
+    $ratingTitle = $productFamily['title'] ?: ($resolvedProductName !== '' ? $resolvedProductName : Str::headline(str_replace('-', ' ', $product)));
+
+    $productRatings = [
+        'summary' => [
+            'average' => number_format($averageScore, 2, '.', ''),
+            'totalReviews' => $totalReviews,
+            'recommendationRate' => $recommendationRate,
+            'fiveStarRate' => $fiveStarRate,
+            'processingSpeed' => $formatDurationLabel($processingDurations),
+            'familyTitle' => $ratingTitle,
+        ],
+        'reviews' => $ratedTransactions->map(static function (Transaction $transaction) use ($formatBuyerName): array {
+            $comment = trim((string) $transaction->rating_comment);
+
+            return [
+                'id' => $transaction->public_id,
+                'name' => $formatBuyerName($transaction->customer_name, $transaction->customer_email, $transaction->customer_whatsapp),
+                'badge' => 'Verified Buyer',
+                'timeLabel' => ($transaction->rated_at ?? $transaction->updated_at)?->locale('id')->translatedFormat('d M Y, H:i') ?? '-',
+                'rating' => (int) ($transaction->rating_score ?? 0),
+                'comment' => $comment !== '' ? $comment : 'Pesanan diproses lancar, produk masuk sesuai pilihan, dan checkout terasa mudah dipakai.',
+            ];
+        })->all(),
+    ];
+
+    return Inertia::render('ProductDetail', [
+        'productId' => $product,
+        'vipCatalogProduct' => $vipCatalogProduct,
+        'initialVipaymentTabs' => $initialVipaymentTabs,
+        'initialVipaymentSource' => $initialVipaymentSource,
+        'initialVipaymentMessage' => $initialVipaymentMessage,
+        'initialPaymentMethods' => $initialPaymentMethods,
+        'initialPaymentMethodsAmount' => $initialPaymentMethodsAmount,
+        'productRatings' => $productRatings,
+    ]);
+})->name('products.show');
+
+Route::get('kalkulator', function () {
+    return Inertia::render('Calculators');
+})->name('calculators.index');
+
+Route::redirect('cek-transaksi', 'riwayat-transaksi');
+
+Route::get('konfirmasi-pesanan/{transaction}/telegram', [TransactionMonitorController::class, 'confirmFromTelegram'])
+    ->middleware('signed')
+    ->name('admin.transactions.manual.confirm.telegram');
+
+Route::middleware(['auth', 'admin.panel'])->group(function () {
+    Route::get('dashboard', DashboardController::class)->name('dashboard');
+    Route::get('dashboard/produk', [ProductSettingsController::class, 'index'])->name('admin.products.index');
+    Route::get('dashboard/provider-kosong', ProviderAvailabilityController::class)->name('admin.provider-availability.index');
+    Route::get('dashboard/security', [SecurityMonitorController::class, 'index'])->name('admin.security.index');
+    Route::get('dashboard/affiliate', [AffiliateMonitorController::class, 'index'])->name('admin.affiliates.index');
+    Route::get('dashboard/security/download', [SecurityMonitorController::class, 'download'])->name('admin.security.download');
+    Route::post('dashboard/produk/{productId}', [ProductSettingsController::class, 'update'])->name('admin.products.update');
+    Route::patch('dashboard/produk/{productId}/visibility', [ProductSettingsController::class, 'updateVisibility'])->name('admin.products.visibility');
+    Route::delete('dashboard/produk/{productId}', [ProductSettingsController::class, 'destroy'])->name('admin.products.destroy');
+    Route::get('dashboard/promo', [PromoCodeController::class, 'index'])->name('admin.promos.index');
+    Route::post('dashboard/promo', [PromoCodeController::class, 'store'])->name('admin.promos.store');
+    Route::patch('dashboard/promo/{promo}', [PromoCodeController::class, 'update'])->name('admin.promos.update');
+    Route::delete('dashboard/promo/{promo}', [PromoCodeController::class, 'destroy'])->name('admin.promos.destroy');
+    Route::get('dashboard/stok-manual', [ManualStockController::class, 'index'])->name('admin.manual-stock.index');
+    Route::post('dashboard/stok-manual', [ManualStockController::class, 'store'])->name('admin.manual-stock.store');
+    Route::get('dashboard/margin', [MarginSettingsController::class, 'index'])->name('admin.margins.index');
+    Route::put('dashboard/margin', [MarginSettingsController::class, 'update'])->name('admin.margins.update');
+    Route::get('dashboard/branding', [BrandingSettingsController::class, 'index'])->name('admin.branding.index');
+    Route::patch('dashboard/branding', [BrandingSettingsController::class, 'update'])->name('admin.branding.update');
+    Route::get('dashboard/transaksi', [TransactionMonitorController::class, 'index'])->name('admin.transactions.index');
+    Route::get('dashboard/transaksi/invite-workspace', [TransactionMonitorController::class, 'index'])
+        ->defaults('filter', 'invite-queue')
+        ->name('admin.transactions.invite-queue');
+    Route::post('dashboard/transaksi/{transaction}/manual-complete', [TransactionMonitorController::class, 'complete'])->name('admin.transactions.manual.complete');
+    Route::post('dashboard/affiliate/{user}/approve', [AffiliateMonitorController::class, 'approve'])->name('admin.affiliates.approve');
+    Route::post('dashboard/affiliate/{user}/reject', [AffiliateMonitorController::class, 'reject'])->name('admin.affiliates.reject');
+    Route::post('dashboard/affiliate/withdrawals/{withdrawal}/process', [AffiliateMonitorController::class, 'processWithdrawal'])->name('admin.affiliates.withdrawals.process');
+    Route::post('dashboard/affiliate/withdrawals/{withdrawal}/pay', [AffiliateMonitorController::class, 'payWithdrawal'])->name('admin.affiliates.withdrawals.pay');
+    Route::post('dashboard/affiliate/withdrawals/{withdrawal}/reject', [AffiliateMonitorController::class, 'rejectWithdrawal'])->name('admin.affiliates.withdrawals.reject');
+});
+
+require __DIR__.'/settings.php';
+require __DIR__.'/auth.php';
