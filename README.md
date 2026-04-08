@@ -40,3 +40,13 @@ npm run dev
 
 - Runtime files in `storage/`, built assets in `public/build/`, and local secrets like `.env` are ignored from Git.
 - Large release artifacts such as APK files should be distributed outside Git history when possible.
+
+## Copyright and License
+
+Copyright (c) 2026 Lyva Indonesia. All rights reserved.
+
+This repository is proprietary. No permission is granted to reuse, redistribute,
+modify, or commercialize the contents without prior written approval from Lyva
+Indonesia.
+
+See [LICENSE](./LICENSE) for the full copyright and usage terms.
