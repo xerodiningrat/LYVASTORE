@@ -3,6 +3,7 @@
 /public/build
 /public/hot
 /public/storage
+/public/apk/*.apk
 /bootstrap/cache/*.php
 /storage/app/*
 !/storage/app/.gitignore
