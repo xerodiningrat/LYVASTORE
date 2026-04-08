@@ -2,6 +2,13 @@
 
 Laravel + Inertia + Vue storefront and admin panel for `lyvaindonesia.com`.
 
+## About
+
+LYVASTORE adalah platform milik Lyva Indonesia untuk top up game, voucher
+digital, pulsa, e-wallet, dan layanan entertainment premium, lengkap dengan
+dashboard admin untuk operasional, promo, stok, transaksi, keuangan, dan
+monitoring.
+
 ## Stack
 
 - Laravel 12
@@ -53,5 +60,6 @@ See [LICENSE](./LICENSE) for the full copyright and usage terms.
 
 Additional repository notices:
 
+- [ABOUT.md](./ABOUT.md)
 - [NOTICE](./NOTICE)
 - [TRADEMARK.md](./TRADEMARK.md)
